@@ -308,7 +308,7 @@ Island. This is most certanly a sign of the North Atlantic Ocislation
   \centering
   \hspace*{-3cm}
   \begin{subfigure}{.5\paperwidth}
-  \includegraphics[width=0.5\paperwidth]{winter-nh-eof.pdf}
+  \includegraphics[scale=0.5]{winter-nh-eof.pdf}
   \caption{co-variability.}
   \end{subfigure}%
   \begin{subfigure}{.5\paperwidth}
@@ -328,7 +328,7 @@ analysis. As seen in Fig. \ref{fig:eof}-b) there is no clear pattern.
 
 If we do a frequency analysis of the principle component we can use a
 regular fourier transform to obtain the dominating frequencies. As
-seen in Fig.\ref{fig:freq}-a, there is a string signal at
+seen in Fig.\ref{fig:freq}-a, there is a strong signal at
 aproximately two and a half year and anothe rclose to four
 years. There is also a signal at around nine years and we should maybe
 not look further since the total serie is only 46 years.
@@ -341,11 +341,11 @@ difference nor which one to favour. A quick search on the NOA and
 periodicity confirms that there should be a close to eight years. 
 
 \begin{figure}[ht!]
+  \hspace*{-4cm}
   \centering
-  \hspace*{-3cm}
   \begin{subfigure}{.5\paperwidth}
-  \includegraphics[width=0.5\paperwidth]{pc1-fourier.pdf}
-  \caption{Fourier transformation.}
+    \includegraphics[scale=0.5]{pc1-fourier.pdf}
+    \caption{Fourier transformation.}
   \end{subfigure}%
   \begin{subfigure}{.5\paperwidth}
     \includegraphics[scale=0.5]{pc1-welsh.pdf}
@@ -381,18 +381,42 @@ EOF2 & -0.71 & 0.71\\
 
 These indicate that the two series vary together (bot have same sign
 in EOF1). Since we only have two series we can also look at a
-scatterplot as shown in Fig.\ref{fig:darwin-tahiti-scatter} the correlation
-is quite strong (0.8).
+scatterplot as shown in Fig.\ref{fig:darwin-tahiti-scatter} the
+correlation is quite strong (0.8).
+
 
 \begin{figure}[ht!]
+  \hspace*{-4cm}
   \centering
-  \includegraphics[width=0.4\paperwidth]{darwin-tahiti-scatter.pdf}
-  \caption{Scatter plot of normalised mslp at Darwin and Tahiti.}
+  \begin{subfigure}{.5\paperwidth}
+  \includegraphics[scale=0.5]{darwin-tahiti-scatter.pdf}
+  \caption{Scatter plot.}
+  \end{subfigure}%
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{darwin-tahiti-running.pdf}
+    \caption{12-month running mean}
+  \end{subfigure}
+  \caption{Anomaly of mean sea level pressure: Darwin and Tahiti.}
   \label{fig:darwin-tahiti-scatter}
 \end{figure}
 
+
 If we investigate PC1 further we can do a fourier transformation and
-see if we can find any perodicity. 
+see if we can find any perodicity. In
+Fig. \ref{fig:fig:darwin-tahiti-fourier.pdf} we see that we have
+periodicity at one year, 3-4 years, 7 and 16 years. The one year
+period is a result of not removing the yearly cycle from the two
+series to start with. The 3-4 and 7 year periods correspond to the El
+Niño Southern Oscillation (ENSO). The 16 year cycle should be taken
+with a grain of salt since we only have fourty years of data to start
+with i.e. less than three periods.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.4\paperwidth]{darwin-tahiti-pc1.pdf}
+  \caption{Fourier transformation of PC1.}
+  \label{fig:darwin-tahiti-fourier.pdf}
+\end{figure}
 
 
 
