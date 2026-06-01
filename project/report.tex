@@ -1,0 +1,399 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18} 
+
+\usepackage{comment}
+
+\usepackage{gensymb}
+
+\begin{document}
+
+\title{
+  \textbf{Mean Sea Level Pressure} \\
+  a look at some atmospheric data
+}
+\author{Johan Montelius}
+\date{\today}
+
+\maketitle
+
+\section*{Introduction}
+
+The mean sea level pressure is a calculated pressure of what it would
+be if the pressure was measured at sea level. If we have measuring
+stations close to the sea, the value is what is measured but if we have
+data from higher grounds we need to convert the measured values to the
+sea level equivalent.
+
+In this report we will examine changes in the mean sea level pressure
+around the globe during the last fifty years. The statistical
+computataions have been performed in Python using several statistical
+libraries. Jupyter has been the development framework and ChatGPT has
+been used to generate part of the code.
+
+\subsection*{the data}
+
+The data is "Monthly NCEP/DOE Reanalysis 2", obtained from the
+National Centers for Environmental Prediction, and consists of the
+monthly values from January 1979 to December 2025. A grid of $2.5
+\degree \times 2.5 \degree$ squares have been modeled from various
+data sources. This would give us $72 \times 144 = 10 368$ grid cells
+but the data contains $73$ latitude vallues includiong both
+$90\degree$ and $-90\degree$. It is not clear how this should be
+interpreted.
+
+We have time series of a total of $47$ years or $564$ months and the
+mean sea level pressure varies from $960\; hPa$ to $1060\; hPa$.
+ 
+It should be noted that a $2.5 \degree \times 2.5 \degree$ sector is
+quite large. At the equator it is a square of aprx $280 \; km \times
+280\; km$. Closer to the poles the north-south distance remains the
+same but the east-west distance decrease; In Sweden the sector has an
+aproxiamately east-west extension of $140\; km$. 
+
+The data that we have is a compilation of data from different
+sources. These measurements are combined to give an estimate of the air
+pressure in each sector around the globe. This means that a value for
+a sector could be the average from more than one measuring station in
+the sector or a value calculated from measuring stations outside of
+the sector. This is important to realize when we later interpret our
+statistical findings. 
+
+\subsection*{one sector}
+
+To get a better understanding of what the air pressure looks like over
+time we can take a look at the data we have for the grid covering
+Stockholm ($lat\; 57.5\degree \; lon\; 17.5\degree\; +
+2.5\degree$). As seen in Fig.\ref{fig:stockholm}, the monthly mean
+values vary quite a lot with no apparent pattern. The average value is
+$1013\; hPa$ which, not surprising, is the standardized mean sea level air
+pressure. The difference from the mean show a close correlation to a natural
+distribution with $\sigma = 473\; Pa$; it is almost symmetrical with a
+standardized skewness of $-0.046$ but slightly heavy tailed with a {\em Pearson
+kurtosis} of $3.7$.
+
+\begin{figure}[t]
+  \centering
+  \hspace*{-2cm}
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{stockholm-full.pdf}
+    \caption{Montly mean values}
+  \end{subfigure}%
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{stockholm-hist.pdf}
+    \caption{Difference from mean.}
+  \end{subfigure}
+  \caption{The grid covering Stockholm.}
+  \label{fig:stockholm}
+\end{figure}
+
+Since this sector is a quite populated area with several meteorological
+stations we could consider these values to be fairly accurate. When we
+look at sectors in the middle of Siberia, the Pacific Ocean or Antarctica -
+we should take the data with a grain of salt.
+
+\section*{Task I - changes between first and second period}
+
+\begin{comment}
+Read the data into Python (or the software of your choise, e.g. Matlab).
+Calulate the annual means of the SLP field at each grid point.
+\end{comment}
+
+As one can see in Fig.\ref{fig:mean-global} the mean pressure over the time
+period does vary over the globe. We have a band of low pressure
+between $50 \degree$ and $75\degree$ south. Higher pressure is found
+north and south of the tropic of Cancer and Capricorn repectivly. 
+ 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.4\paperwidth]{mean-global.pdf}
+  \caption{Mean sea level pressure for the whole period.}
+  \label{fig:mean-global}
+\end{figure}
+
+If we plot the data on a globe, as in Fig \ref{fig:mean-hemi}, we
+clearly see how the low pressure surrounds Antartica and how the high
+pressure lies over the Atlantic, Pacific and Indian Ocean.
+
+\begin{figure}[ht!]
+  \centering
+  \hspace*{-4cm}
+  \begin{subfigure}{.4\paperwidth}
+    \includegraphics[scale=0.6]{mean-north.pdf}
+    \caption{Northern hemisphere}
+  \end{subfigure}%
+  \begin{subfigure}{.6\paperwidth}
+    \includegraphics[scale=0.6]{mean-south.pdf}
+    \caption{Southern hemisphere.}
+  \end{subfigure}
+  \caption{The low pressure clearly suround Antarctica. }
+  \label{fig:mean-hemi}
+\end{figure}
+
+\begin{comment}
+
+Calculate the climatologies for the first and second halves of the
+record (at each grid point).  Analyse the difference between these
+climatologies and its significance (can take α = 5%).  Plot a map of
+the difference (second half minus first half) and the result of the
+significance.
+
+\end{comment}
+
+If we divide the time series in two segments we can compare the first
+part of the time series with the second. The difference in mean sea
+level air pressure is shown in Fig.\ref{fig:dif-global}. The data shows a
+difference in the Pacific just north of Antartica where the mean sea
+level air pressure has decreased by about $200-300\; Pa$. North of
+this region we see an increase over the Pacific by about $100-200\;
+Pa$. In the northern hemipshere there is a slight decrease apart from
+two outliers, one on Greenland and the other around the Caspian sea.
+
+The measurements at any given location can vary by $10\; hPa$ between
+a high and low pressure so a change of $0.2\; hPa$ is quite small in
+coparsision. The standard deviation in the Stockholm segment was aprx
+$0.5\; hPa$ so we are loking at changes that are less than half a
+standard deviation.
+
+\begin{figure}[ht!]
+  \centering
+  \hspace*{-4cm}
+  \begin{subfigure}{.4\paperwidth}
+    \includegraphics[scale=0.6]{dif-north.pdf}
+    \caption{Northern hemisphere}
+  \end{subfigure}%
+  \begin{subfigure}{.6\paperwidth}
+    \includegraphics[scale=0.6]{dif-south.pdf}
+    \caption{Southern hemisphere.}
+  \end{subfigure}
+  \caption{Difference of mean between first and second half of the time series. } 
+  \label{fig:dif-global}
+\end{figure}
+
+
+We also must consider that the data we have is not directly measured
+valued but values extrapolated from various sources: fixed stations,
+balloons, ships, satellites etc. What are the data that we have for
+Antarctica built from? Is the values in the south Pacific just the
+average of a station at Pitcairn Island and the McMurdo research
+station on Antarctica? Could the anomalies on Greenland and the
+Caspian sea be a result of inaccurate or missing measurements?
+
+We can calculat the {\em p-values} at each grid point to evaluate how
+significant the changes are. Since we have so many series we should
+be conservatoive and we choose $\alpha = 0.01$ as a threshold  for
+sigificance. The result is shown in Fig. \ref{fig:sig-global} and we
+note that we do have significant changes around Antarctica and the
+south Pacific. We also note that the changes on Greenland and at the
+Caspian sea are sigficant as a large belt across the Indian Ocean. 
+
+
+\begin{figure}[ht!]
+  \centering
+  \hspace*{-4cm}
+  \begin{subfigure}{.4\paperwidth}
+    \includegraphics[scale=0.6]{sig-north.pdf}
+    \caption{Northern hemisphere}
+  \end{subfigure}%
+  \begin{subfigure}{.6\paperwidth}
+    \includegraphics[scale=0.6]{sig-south.pdf}
+    \caption{Southern hemisphere.}
+  \end{subfigure}
+  \caption{Significance at $\alpha = 0.01$}
+  \label{fig:sig-global}
+\end{figure}
+
+Given that the data we have is mainly extrapolated from a limited set
+of meteorlogical stations I do not think that we should conclude that
+any significant changes have occured. One can note that the changes
+that we have identifies are larger over areas where we have the least
+data (Pacific ocean, Antartica). In all areas where we have mnore data
+(Europe, North America) we see no changes at all. The two oulieres
+(Greenland, Caspian sea) might well be two stations that changed
+location or equipment. I would not be comfortable to draw any
+conclusions more than that changes over the period have been small.
+
+\section*{Task II - correlation over time}
+
+Even if we have no significant changes between the first and second
+period we do of course have local changes during the whole period. The
+question is if these local changes are correlated. One would of course
+expect that we have a large positive correlation between adjacent grid
+cells but the interesting question is if we have correlation, positiv
+or negative, between areas that are wide apart; for example an increas
+of air pressure in one reagion is correlated in a decrease in another
+region.
+
+\begin{comment}
+
+Calculate the seasonal cycle (at each grid point) and obtain the SLP
+anomalies by subtracting from each month its climatology.
+\end{comment}
+
+In order to better find these correlations we first remove any
+seasonal pattern from the measurements. If we for example look at
+Fig.\ref{fig:stockholm-anom} that shows the average monthly air
+pressure over a year in Stockholm, we see that it varies over the
+year. The winter months have in general a lower pressure and the
+highest pressure is found during the spring months. If we now subtract
+each monthly mean value from the measured values we obtain the
+anomalies over the period that does not depend on the time of year. 
+
+\begin{figure}[ht]
+  \centering
+  \hspace*{-2cm}
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{stockholm-year.pdf}
+    \caption{Yearly cycle.}
+  \end{subfigure}%
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{stockholm-anom.pdf}
+    \caption{Montly anomalies.}
+  \end{subfigure}
+  \caption{The grid covering Stockholm.}
+  \label{fig:stockholm-anom}
+\end{figure}
+
+Our task is to look at the aggregated anomalies over the northern
+hemisphere (north of $20\degree\; N$) during the winter months (Dec,
+Jan, Feb). We start by selecting the interesting months but when we
+average them we want the December record of one year be average
+together with the January and February records of the next year. We
+note that the first winter only contain January and February and the
+last winter only the records from December so these are excluded in
+the analysis.
+
+
+
+\begin{comment}
+Calculate the EOFs of the winter (DJF) means of SLP anomalies over the
+Northern Hemisphere north of 20o N.
+\end{comment}
+
+When we examine the data over the northern hemisphere we should take
+into account that the grids are of different sizes. A grid closer to
+the poles is smaller compared to a grid close to the equator. If we
+did nbot take this into account the cells closer to the north pole
+would be over represented. To counter this we compute a weight matrix
+where each grid gets a weight that is proportional to its size.
+
+Since each grid is a cell with an north-south length that does not
+vary but where the west-east length is proportional $cos(lat)$ we
+compute a weight matrix with $\sqrt{cos(lat)}$. Chosing the square
+root is justified by the fact that the analysis will square the
+measurments so the computed weighted vakues will be wighted by $cos(lat)$. 
+
+\begin{comment}
+Discuss the leading EOF and the corresponding PC (EOF1/PC1), and
+analyse the spectrum of PC1
+\end{comment}
+
+The result of running a EOF analysis is shown in
+Fig. \ref{fig:eof}-a. We now see that we have an interesting areas of
+anti-variability. There is a large area north-east of Island with
+negative values and an area east of Azores with positive values. This
+means that when we have higher pressure (than normal) over the Azores
+we are more likely to find a lower (than normal) pressure over
+Island. This is most certanly a sign of the North Atlantic Ocislation
+(NOA).
+
+\begin{figure}[ht!]
+  \centering
+  \hspace*{-3cm}
+  \begin{subfigure}{.5\paperwidth}
+  \includegraphics[width=0.5\paperwidth]{winter-nh-eof.pdf}
+  \caption{co-variability.}
+  \end{subfigure}%
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{winter-nh-pc1.pdf}
+    \caption{principle component 1}
+  \end{subfigure}
+  \caption{EOF analysis of the northern hemisphere}
+  \label{fig:eof}
+\end{figure}
+
+The interesting question now is what this oscillation looks like. If
+we only know the co-variability we don't know if this variability is
+on a yearly basis or on basis or on a five year basis. We need to look
+at the {\em principle component 1} that was derived in the
+analysis. As seen in Fig. \ref{fig:eof}-b) there is no clear pattern.
+
+
+If we do a frequency analysis of the principle component we can use a
+regular fourier transform to obtain the dominating frequencies. As
+seen in Fig.\ref{fig:freq}-a, there is a string signal at
+aproximately two and a half year and anothe rclose to four
+years. There is also a signal at around nine years and we should maybe
+not look further since the total serie is only 46 years.
+
+We coudl also perform a Welsh's method which could remove some
+noice. The result is shown in Fig.\ref{fig:freq}-b and we also here
+see the signals at two and a half years, four years and now at close
+to eight years. I'm currently not able to give any insight in the
+difference nor which one to favour. A quick search on the NOA and
+periodicity confirms that there should be a close to eight years. 
+
+\begin{figure}[ht!]
+  \centering
+  \hspace*{-3cm}
+  \begin{subfigure}{.5\paperwidth}
+  \includegraphics[width=0.5\paperwidth]{pc1-fourier.pdf}
+  \caption{Fourier transformation.}
+  \end{subfigure}%
+  \begin{subfigure}{.5\paperwidth}
+    \includegraphics[scale=0.5]{pc1-welsh.pdf}
+    \caption{Welsh's method}
+  \end{subfigure}
+  \caption{Frequency analysis of variability.}
+  \label{fig:freq}
+\end{figure}
+
+\section{Task III - Darwin vs Tahiti}
+
+Our third task is to examine the spectrum of variablility between the
+area around Darwin (AUS) and Tahiti.  We select the nine grid cells
+that are closest to either location and average the values of these
+grids in two time series. For each serie we compute the anomalies by
+subtracting the mean and also standardise them by dividing by their
+standard deviation.
+
+Given the two series we can now do an EOF analysis which give us the
+following values:
+
+\begin{table}
+\centering
+\begin{tabular}{ c c c }
+ \textbf{EOF} & \textbf{ Darwin} & \textbf{ Tahiti} \\
+\hline\\
+EOF1 & -0.71 & -0.71\\
+EOF2 & -0.71 & 0.71\\
+\end{tabular}
+\caption{EOF of Darwin vs Tahiti}
+\label{tab:darwin-tahiti-eof}
+\end{table}
+
+These indicate that the two series vary together (bot have same sign
+in EOF1). Since we only have two series we can also look at a
+scatterplot as shown in Fig.\ref{fig:darwin-tahiti-scatter} the correlation
+is quite strong (0.8).
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=0.4\paperwidth]{darwin-tahiti-scatter.pdf}
+  \caption{Scatter plot of normalised mslp at Darwin and Tahiti.}
+  \label{fig:darwin-tahiti-scatter}
+\end{figure}
+
+If we investigate PC1 further we can do a fourier transformation and
+see if we can find any perodicity. 
+
+
+
+\end{document}
